@@ -123,10 +123,18 @@ void DCT(double *x,double *y,int N)
      {
            *(x_r+k) = x[k];
            *(x_i+k) = 0;
-           printf("x_%d = %f + %f i\n",k,*(x_r+k),*(x_i+k));
+           //printf("x_%d = %f + %f i\n",k,*(x_r+k),*(x_i+k));
      }
      
      FFT(x_r,x_i,y_r,y_i,N);
+     //for(k = 0 ; k < N ; k++) printf("y_%d : %f + %f i\n",k,y_r[k],y_i[k]);
+     
+     //dct process
+     for(k = 0 ; k < N/4 ; k++)
+     {
+           y[k] = y_r[k]*sqrt(8.0/N)/2;
+     }
+     y[0] = y[0]/sqrt(2);
      
      free(x_r);
      free(x_i);
@@ -148,7 +156,7 @@ int main()
     printf("N = %d\n",N);
     
     x = (double *) malloc (4*N*sizeof(double));
-    y = (double *) malloc (4*N*sizeof(double));
+    y = (double *) malloc (N*sizeof(double));
     
     for(k = 0 ; k < N ; k++)
     {
@@ -157,9 +165,10 @@ int main()
           x[2*N+2*k] = 0;
           x[2*N+2*k+1] = N - k-1;
     }
+    for(k = 0 ; k < N ; k++) printf("x_%d = %f\n",k,x[2*k+1]);
     
     DCT(x,y,4*N);
-    //for(k = 0 ; k < 4*N ; k++) printf("x_%d = %f\n",k,x[k]);
+    for(k = 0 ; k < N ; k++) printf("y_%d = %f\n",k,y[k]);
     
     free(x);
     free(y);
